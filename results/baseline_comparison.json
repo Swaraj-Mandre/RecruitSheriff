@@ -1,0 +1,505 @@
+[
+  {
+    "id": 1,
+    "resume": "Data analyst with 2 years experience in SQL, Excel, and Tableau. Built dashboards for sales reporting. No Python or cloud experience.",
+    "jd": "Looking for a Data Scientist with strong Python, SQL, and machine learning skills. AWS experience preferred. 3+ years experience required.",
+    "local_model": {
+      "match_score": 20,
+      "strengths": [
+        "SQL skills mentioned",
+        "Experience with Tableau mentioned"
+      ],
+      "gaps": [
+        "Python skills not mentioned",
+        "Cloud experience (AWS) not mentioned",
+        "Machine learning skills not mentioned"
+      ],
+      "interview_questions": [],
+      "raw_length": 518
+    },
+    "gemini": {
+      "match_score": 25,
+      "strengths": [
+        "Demonstrated experience with SQL, a required skill.",
+        "Experience in building dashboards for sales reporting using Tableau, showing practical data visualization skills."
+      ],
+      "gaps": [
+        "Lacks Python experience, which is a strong requirement for the Data Scientist role.",
+        "No machine learning skills mentioned, a critical component for a Data Scientist.",
+        "Falls short on the required experience (2 years vs 3+ years required).",
+        "No cloud experience (AWS preferred), a significant gap.",
+        "Role mismatch (Data Analyst vs Data Scientist)."
+      ],
+      "interview_questions": [],
+      "raw_length": 977
+    }
+  },
+  {
+    "id": 2,
+    "resume": "Full-stack developer, 4 years experience. React, Node.js, PostgreSQL, Docker. Led a team of 3 on an e-commerce platform rebuild.",
+    "jd": "Senior Full-Stack Engineer needed. React, Node.js, and cloud deployment experience (AWS/GCP) required. Leadership experience a plus.",
+    "local_model": {
+      "match_score": 60,
+      "strengths": [
+        "Cloud deployment experience (matches JD)",
+        "Leadership experience (matches JD)",
+        "Full-stack development skills (matches JD)"
+      ],
+      "gaps": [
+        "AWS/GCP experience is not explicitly mentioned on the resume, although Docker is mentioned.",
+        "No mention of PostgreSQL being used in a production environment or with other cloud services.",
+        "No explicit mention of Node.js version or experience with other frameworks."
+      ],
+      "interview_questions": [],
+      "raw_length": 692
+    },
+    "gemini": {
+      "match_score": 65,
+      "strengths": [
+        "Strong match with core technical requirements (React, Node.js).",
+        "Proven leadership experience, directly addressing a \"plus\" in the job description.",
+        "Relevant full-stack experience for the role."
+      ],
+      "gaps": [
+        "Lack of explicit cloud deployment experience (AWS/GCP) which is a required skill.",
+        "The \"Senior\" title in the job description may imply more than 4 years of experience for some organizations, although leadership helps mitigate this."
+      ],
+      "interview_questions": [],
+      "raw_length": 919
+    }
+  },
+  {
+    "id": 3,
+    "resume": "Recent CS graduate. Coursework in data structures, algorithms, and operating systems. One internship doing QA testing. No industry ML experience.",
+    "jd": "Machine Learning Engineer, entry-level. Strong Python and ML fundamentals required. Production ML experience is a plus but not mandatory for the right candidate.",
+    "local_model": {
+      "match_score": 40,
+      "strengths": [
+        "Relevant coursework in data structures, algorithms, and operating systems.",
+        "Experience with QA testing, which can be transferable to testing ML models."
+      ],
+      "gaps": [
+        "Lack of industry ML experience.",
+        "Limited Python experience beyond coursework.",
+        "No production experience."
+      ],
+      "interview_questions": [],
+      "raw_length": 642
+    },
+    "gemini": {
+      "match_score": 40,
+      "strengths": [
+        "Recent Computer Science graduate, aligning with the entry-level nature of the role.",
+        "Solid foundational computer science coursework, including data structures and algorithms, which are crucial for Machine Learning.",
+        "Possesses internship experience, demonstrating general work ethic, professionalism, and ability to contribute in a professional setting."
+      ],
+      "gaps": [
+        "Lack of explicit mention or demonstration of strong Python proficiency, a core requirement for the role.",
+        "Absence of specific coursework or projects indicating knowledge of Machine Learning fundamentals.",
+        "No direct industry or academic experience in Machine Learning, making it difficult to assess readiness for the role's technical demands."
+      ],
+      "interview_questions": [],
+      "raw_length": 1188
+    }
+  },
+  {
+    "id": 4,
+    "resume": "DevOps engineer, 5 years. Kubernetes, Terraform, AWS, CI/CD pipelines. Managed infrastructure for a 50-person engineering org.",
+    "jd": "Backend Software Engineer position. Java, Spring Boot, microservices architecture. Kubernetes experience is a bonus.",
+    "local_model": {
+      "match_score": 30,
+      "strengths": [
+        "None"
+      ],
+      "gaps": [
+        "Java programming skills are missing from the resume.",
+        "Experience with microservices architecture is not mentioned.",
+        "Spring Boot experience is lacking, although Kubernetes experience is a bonus."
+      ],
+      "interview_questions": [],
+      "raw_length": 597
+    },
+    "gemini": {
+      "match_score": 25,
+      "strengths": [
+        "Strong Kubernetes experience, which is explicitly noted as a bonus for this position.",
+        "5 years of professional experience, demonstrating established tenure and a solid career foundation.",
+        "Experience with CI/CD pipelines and managing infrastructure, which provides valuable operational insight for deploying backend services."
+      ],
+      "gaps": [
+        "No explicit mention of core backend development languages or frameworks such as Java or Spring Boot.",
+        "Lack of demonstrated experience in designing and implementing microservices architecture from a software engineering perspective.",
+        "The primary role of \"DevOps engineer\" differs significantly from \"Backend Software Engineer,\" indicating a different core skillset focus."
+      ],
+      "interview_questions": [],
+      "raw_length": 1309
+    }
+  },
+  {
+    "id": 5,
+    "resume": "Marketing coordinator with 3 years experience in social media campaigns and content strategy. Basic Excel skills. No technical background.",
+    "jd": "Product Manager role. Requires technical background, experience working with engineering teams, and data-driven decision making skills.",
+    "local_model": {
+      "match_score": 0,
+      "strengths": [
+        "None"
+      ],
+      "gaps": [
+        "Technical background",
+        "Experience working with engineering teams",
+        "Data-driven decision making skills"
+      ],
+      "interview_questions": [],
+      "raw_length": 420
+    },
+    "gemini": {
+      "match_score": 5,
+      "strengths": [
+        "3 years of professional experience indicates a level of professional maturity and work ethic.",
+        "Experience with content strategy and social media offers a perspective on user engagement and product communication."
+      ],
+      "gaps": [
+        "Lacks the required technical background for a Product Manager role.",
+        "No experience working with engineering teams is mentioned.",
+        "Limited demonstration of data-driven decision-making skills.",
+        "Professional experience is not directly in product management or a technical domain."
+      ],
+      "interview_questions": [],
+      "raw_length": 1072
+    }
+  },
+  {
+    "id": 6,
+    "resume": "Senior backend engineer, 6 years. Python, Django, PostgreSQL, Redis, AWS (EC2, S3, RDS). Built and scaled a payments API handling 2M requests/day.",
+    "jd": "Backend Engineer, Python/Django, AWS experience required. 4+ years experience. Payments or fintech domain experience strongly preferred.",
+    "local_model": {
+      "match_score": 60,
+      "strengths": [
+        "Relevant technical skills (Python, Django, PostgreSQL, Redis, AWS) match JD.",
+        "Experience with building and scaling a payments API matches JD.",
+        "Experience handling 2M requests/day is a strong asset."
+      ],
+      "gaps": [
+        "Less than 4 years of experience, which is a requirement in the JD.",
+        "No experience in payments or fintech domain, although relevant technical skills are present.",
+        "No mention of experience with other relevant technologies such as microservices, gRPC, or containerization."
+      ],
+      "interview_questions": [],
+      "raw_length": 897
+    },
+    "gemini": {
+      "match_score": 95,
+      "strengths": [
+        "Exceeds the required 4+ years of experience with 6 years as a Senior Backend Engineer.",
+        "Directly matches all core technical requirements: Python, Django, and AWS experience (EC2, S3, RDS).",
+        "Possesses highly relevant payments domain experience, which is strongly preferred, demonstrated by building and scaling a payments API.",
+        "Proven ability to handle high-scale systems, indicated by building an API handling 2M requests/day."
+      ],
+      "gaps": [
+        "While AWS experience is listed, specific depth or breadth of usage beyond EC2, S3, and RDS is not detailed.",
+        "No explicit mention of software development lifecycle practices such as testing methodologies, CI/CD, or version control system experience."
+      ],
+      "interview_questions": [],
+      "raw_length": 1060
+    }
+  },
+  {
+    "id": 7,
+    "resume": "Graphic designer, 5 years experience. Adobe Photoshop, Illustrator, InDesign. Branding and print design for retail clients.",
+    "jd": "Frontend Developer position. React, TypeScript, CSS required. UI/UX sensibility a plus.",
+    "local_model": {
+      "match_score": 0,
+      "strengths": [
+        "None"
+      ],
+      "gaps": [
+        "Frontend development skills (React, TypeScript, CSS)",
+        "UI/UX experience",
+        "Experience with modern web development technologies"
+      ],
+      "interview_questions": [],
+      "raw_length": 434
+    },
+    "gemini": {
+      "match_score": 5,
+      "strengths": [
+        "5 years of professional experience indicates a proven work history and ability to meet deadlines.",
+        "Experience in graphic design may suggest an aptitude for UI/UX sensibility, which is a \"plus\" for the role."
+      ],
+      "gaps": [
+        "No mention of required frontend development skills such as React, TypeScript, or CSS.",
+        "The resume highlights experience in graphic design software rather than programming languages or frameworks.",
+        "Lack of explicit experience or training in software development or coding practices."
+      ],
+      "interview_questions": [],
+      "raw_length": 859
+    }
+  },
+  {
+    "id": 8,
+    "resume": "Mechanical engineer, 3 years, AutoCAD and SolidWorks. Worked on HVAC system design. Some Python scripting for automating design calculations.",
+    "jd": "Data Engineer role. Python, SQL, Airflow, and cloud data warehousing (Snowflake/BigQuery) required. 2+ years experience.",
+    "local_model": {
+      "match_score": 0,
+      "strengths": [
+        "None"
+      ],
+      "gaps": [
+        "Cloud data warehousing experience (Snowflake/BigQuery)",
+        "Data engineering skills (Python, SQL, Airflow)",
+        "2+ years of experience in a Data Engineer role"
+      ],
+      "interview_questions": [],
+      "raw_length": 573
+    },
+    "gemini": {
+      "match_score": 20,
+      "strengths": [
+        "Meets the minimum experience requirement with 3 years of professional experience.",
+        "Possesses foundational Python scripting experience."
+      ],
+      "gaps": [
+        "Lacks experience with SQL, a core requirement for the Data Engineer role.",
+        "No mention of Airflow or other orchestration tools.",
+        "No experience with cloud data warehousing platforms like Snowflake or BigQuery.",
+        "Python experience is primarily in a mechanical engineering context rather than data engineering or data manipulation."
+      ],
+      "interview_questions": [],
+      "raw_length": 907
+    }
+  },
+  {
+    "id": 9,
+    "resume": "ML researcher, PhD, 2 published papers on transformer architectures. PyTorch, distributed training experience. No production deployment experience.",
+    "jd": "Applied Scientist role. Strong research background in deep learning required. Ability to publish and prototype novel architectures valued over production experience.",
+    "local_model": {
+      "match_score": 60,
+      "strengths": [
+        "Research background in deep learning (matches JD)",
+        "Published papers on transformer architectures (matches JD)",
+        "Experience with PyTorch and distributed training (matches JD)"
+      ],
+      "gaps": [
+        "Production deployment experience is missing from resume (required in JD)",
+        "No mention of ability to prototype novel architectures or publish research in industry setting (valued in JD)",
+        "Lack of specific skills or experience in Applied Scientist role, such as experience with model deployment or maintenance (required in JD)"
+      ],
+      "interview_questions": [],
+      "raw_length": 971
+    },
+    "gemini": {
+      "match_score": 95,
+      "strengths": [
+        "Exceptional research background evidenced by a PhD and two published papers on cutting-edge transformer architectures.",
+        "Demonstrated ability to contribute novel research and publish, directly aligning with the job description's primary value.",
+        "Strong technical proficiency in PyTorch and distributed training, essential for prototyping advanced deep learning models.",
+        "The candidate's lack of production deployment experience is explicitly mitigated by the job description's preference for research over production."
+      ],
+      "gaps": [
+        "The resume does not explicitly detail experience in hardening or iterating on research prototypes for practical, internal applications beyond academic publication.",
+        "Brevity of the resume limits insight into the specific scale, complexity, or broader impact of the research projects undertaken."
+      ],
+      "interview_questions": [],
+      "raw_length": 1261
+    }
+  },
+  {
+    "id": 10,
+    "resume": "Customer support representative, 4 years. Zendesk, basic SQL for pulling reports. No coding background.",
+    "jd": "Software Engineer, backend focus. Requires strong programming fundamentals in at least one language (Python, Java, or Go) and CS degree or equivalent experience.",
+    "local_model": {
+      "match_score": 0,
+      "strengths": [
+        "None"
+      ],
+      "gaps": [
+        "Programming fundamentals (specifically in Python, Java, or Go)",
+        "CS degree or equivalent experience",
+        "Backend development expertise"
+      ],
+      "interview_questions": [],
+      "raw_length": 413
+    },
+    "gemini": {
+      "match_score": 5,
+      "strengths": [
+        "Four years of professional work experience, demonstrating reliability and commitment.",
+        "Experience with basic SQL for data reporting, indicating some technical aptitude."
+      ],
+      "gaps": [
+        "Lacks required strong programming fundamentals in Python, Java, or Go.",
+        "No experience as a Software Engineer or in backend development.",
+        "No indication of a CS degree or equivalent software engineering experience.",
+        "Explicitly states \"No coding background,\" which is a direct contradiction to the role requirements."
+      ],
+      "interview_questions": [],
+      "raw_length": 1197
+    }
+  },
+  {
+    "id": 11,
+    "resume": "DevOps/SRE, 7 years. Kubernetes, Terraform, Prometheus, Grafana, on-call rotation experience, incident response lead for a 20-person team.",
+    "jd": "Site Reliability Engineer. Kubernetes and observability tooling required. On-call and incident management experience essential. 5+ years.",
+    "local_model": {
+      "match_score": 80,
+      "strengths": [
+        "Relevant technical skills (Kubernetes, Terraform, Prometheus, Grafana) match JD requirements.",
+        "On-call rotation experience and incident response lead for a large team align with JD requirements.",
+        "7 years of experience in DevOps/SRE roles is close to the 5+ years required in JD."
+      ],
+      "gaps": [
+        "Lack of explicit mention of experience with observability tooling, although related skills are present.",
+        "No clear indication of experience with cloud providers or AWS specifically, although Terraform can be used on various platforms.",
+        "No mention of security certifications or experience with compliance frameworks."
+      ],
+      "interview_questions": [],
+      "raw_length": 963
+    },
+    "gemini": {
+      "match_score": 95,
+      "strengths": [
+        "Direct alignment with \"Site Reliability Engineer\" role and exceeds 5+ years experience with 7 years.",
+        "Explicitly lists all required technical skills: Kubernetes, Prometheus, and Grafana (observability tooling).",
+        "Strong experience in essential areas: on-call rotation and leadership in incident response for a significant team."
+      ],
+      "gaps": [
+        "None identified based on the provided job description requirements."
+      ],
+      "interview_questions": [],
+      "raw_length": 746
+    }
+  },
+  {
+    "id": 12,
+    "resume": "Junior developer, 1 year experience. JavaScript, basic React. Built two small personal projects. No professional team experience.",
+    "jd": "Frontend Engineer, mid-level. React, TypeScript, 3+ years professional experience, comfortable owning features independently.",
+    "local_model": {
+      "match_score": 20,
+      "strengths": [
+        "None"
+      ],
+      "gaps": [
+        "Lack of professional team experience (required in JD)",
+        "Limited experience with TypeScript (required in JD)",
+        "No experience with backend development or full-stack work (required in JD)"
+      ],
+      "interview_questions": [],
+      "raw_length": 537
+    },
+    "gemini": {
+      "match_score": 10,
+      "strengths": [
+        "Has foundational knowledge in JavaScript and basic React, which are relevant technologies for the role.",
+        "Proactively built personal projects, demonstrating initiative and practical application of learned skills."
+      ],
+      "gaps": [
+        "Significantly lacks the required 3+ years of professional experience, with no professional team experience noted.",
+        "No mention of TypeScript experience, a core requirement for the role.",
+        "Does not demonstrate comfort owning features independently, a key expectation for a mid-level engineer.",
+        "React proficiency is described as \"basic,\" which may not meet mid-level expectations."
+      ],
+      "interview_questions": [],
+      "raw_length": 1150
+    }
+  },
+  {
+    "id": 13,
+    "resume": "Business analyst, 5 years. SQL, Power BI, stakeholder management, requirements gathering. Led migration of legacy reporting to Power BI.",
+    "jd": "Data Analyst position. SQL and BI tool experience (Power BI or Tableau) required. Strong communication skills with non-technical stakeholders valued.",
+    "local_model": {
+      "match_score": 60,
+      "strengths": [
+        "SQL experience (matches JD)",
+        "Power BI experience (matches JD)",
+        "Stakeholder management skills (matches JD)"
+      ],
+      "gaps": [
+        "Lack of explicit mention of Tableau experience, although it's a common BI tool (missing from JD)",
+        "Limited information on data analysis skills or experience with other tools beyond SQL and Power BI (missing from JD)",
+        "No mention of project management or leadership experience, which is not explicitly required but could be beneficial for the role (missing from JD)"
+      ],
+      "interview_questions": [],
+      "raw_length": 921
+    },
+    "gemini": {
+      "match_score": 95,
+      "strengths": [
+        "Direct alignment with required SQL and Power BI technical skills.",
+        "Proven experience in stakeholder management, a directly valued skill.",
+        "Demonstrated project leadership in relevant data reporting migration.",
+        "Solid 5 years of experience in a closely related analytical role."
+      ],
+      "gaps": [
+        "Resume title is \"Business Analyst\" rather than \"Data Analyst,\" which might suggest a slightly different primary focus to some hiring managers.",
+        "No explicit mention of data modeling or advanced statistical analysis, which are sometimes aspects of Data Analyst roles (though not explicitly required in this JD)."
+      ],
+      "interview_questions": [],
+      "raw_length": 1283
+    }
+  },
+  {
+    "id": 14,
+    "resume": "iOS developer, 4 years. Swift, SwiftUI, published 3 apps on the App Store, one with 100K+ downloads. No backend experience.",
+    "jd": "Mobile Engineer (iOS). Swift/SwiftUI required, 3+ years, App Store publishing experience preferred. Backend/API integration experience a plus, not required.",
+    "local_model": {
+      "match_score": 60,
+      "strengths": [
+        "Relevant technical skills (Swift, SwiftUI) match JD.",
+        "Published 3 apps on the App Store demonstrates experience with app development.",
+        "No mention of backend experience, but it's not required."
+      ],
+      "gaps": [
+        "Lack of backend experience and API integration skills.",
+        "No mention of experience with other mobile technologies or frameworks.",
+        "No information on team management or leadership experience."
+      ],
+      "interview_questions": [],
+      "raw_length": 735
+    },
+    "gemini": {
+      "match_score": 92,
+      "strengths": [
+        "Strong experience with Swift/SwiftUI (4 years), exceeding the 3+ years requirement.",
+        "Proven track record of App Store publishing with 3 apps, including one with over 100K+ downloads, fulfilling and exceeding the preferred experience.",
+        "Direct alignment with the core iOS developer role and required technologies."
+      ],
+      "gaps": [
+        "Lack of explicit backend/API integration experience, which was noted as a plus for the role."
+      ],
+      "interview_questions": [],
+      "raw_length": 1000
+    }
+  },
+  {
+    "id": 15,
+    "resume": "Sales executive, 6 years, enterprise SaaS sales, exceeded quota 4 years running. No technical background whatsoever.",
+    "jd": "Machine Learning Engineer. Strong Python and ML framework experience (PyTorch/TensorFlow) required. 3+ years hands-on ML experience.",
+    "local_model": {
+      "match_score": 0,
+      "strengths": [
+        "None"
+      ],
+      "gaps": [
+        "Technical background in Python and ML frameworks (PyTorch/TensorFlow)",
+        "Hands-on ML experience of at least 3 years",
+        "Experience with machine learning engineering"
+      ],
+      "interview_questions": [],
+      "raw_length": 454
+    },
+    "gemini": {
+      "match_score": 0,
+      "strengths": [
+        "None relevant to the Machine Learning Engineer role."
+      ],
+      "gaps": [
+        "Lacks required Python programming skills.",
+        "No experience with ML frameworks like PyTorch or TensorFlow.",
+        "No hands-on Machine Learning experience.",
+        "Expressly states \"No technical background whatsoever\" directly contradicting job requirements."
+      ],
+      "interview_questions": [],
+      "raw_length": 746
+    }
+  }
+]

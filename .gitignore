@@ -8,14 +8,17 @@ __pycache__/
 .venv/
 venv/
 
-# Training artifacts
-training/output/
+# Training artifacts - large binaries only, keep config/metadata tracked
+training/output/*.safetensors
+training/output/tokenizer.json
 checkpoints/
-*.safetensors
 
 # Local compiled/runtime caches
 unsloth_compiled_cache/
-AI_CACHE/
+
+# Diagnostic/scratch files (not project deliverables)
+training_run.log
+results/evaluation_report_dump*.txt
 
 # Editor/OS
 .vscode/

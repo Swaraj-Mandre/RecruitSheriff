@@ -1,0 +1,320 @@
+{
+  "format_compliance_rate_pct": 100.0,
+  "first_try_retry_rate_pct": 0.0,
+  "hallucination_rate_pct": 13.6,
+  "gaps_contradiction_rate_pct": 0.0,
+  "avg_score_stdev": 5.77,
+  "format_results": [
+    {
+      "id": 1,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 2,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 3,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 4,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 5,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 6,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 7,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 8,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 9,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 10,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 11,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 12,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 13,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 14,
+      "format_ok": true,
+      "retries_used": 0
+    },
+    {
+      "id": 15,
+      "format_ok": true,
+      "retries_used": 0
+    }
+  ],
+  "consistency_results": [
+    {
+      "id": 1,
+      "scores": [
+        20,
+        20,
+        30
+      ],
+      "stdev": 5.77
+    },
+    {
+      "id": 2,
+      "scores": [
+        60,
+        60,
+        60
+      ],
+      "stdev": 0.0
+    },
+    {
+      "id": 3,
+      "scores": [
+        40,
+        30,
+        30
+      ],
+      "stdev": 5.77
+    },
+    {
+      "id": 4,
+      "scores": [
+        60,
+        30,
+        60
+      ],
+      "stdev": 17.32
+    },
+    {
+      "id": 5,
+      "scores": [
+        0,
+        0,
+        0
+      ],
+      "stdev": 0.0
+    }
+  ],
+  "hallucination_results": [
+    {
+      "total_strengths_claimed": 2,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 1
+    },
+    {
+      "total_strengths_claimed": 3,
+      "ungrounded_count": 2,
+      "ungrounded_examples": [
+        "Cloud deployment experience (matches JD)",
+        "Leadership experience (matches JD)"
+      ],
+      "id": 2
+    },
+    {
+      "total_strengths_claimed": 2,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 3
+    },
+    {
+      "total_strengths_claimed": 0,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 4
+    },
+    {
+      "total_strengths_claimed": 0,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 5
+    },
+    {
+      "total_strengths_claimed": 3,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 6
+    },
+    {
+      "total_strengths_claimed": 0,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 7
+    },
+    {
+      "total_strengths_claimed": 0,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 8
+    },
+    {
+      "total_strengths_claimed": 3,
+      "ungrounded_count": 1,
+      "ungrounded_examples": [
+        "Research background in deep learning (matches JD)"
+      ],
+      "id": 9
+    },
+    {
+      "total_strengths_claimed": 0,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 10
+    },
+    {
+      "total_strengths_claimed": 3,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 11
+    },
+    {
+      "total_strengths_claimed": 0,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 12
+    },
+    {
+      "total_strengths_claimed": 3,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 13
+    },
+    {
+      "total_strengths_claimed": 3,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 14
+    },
+    {
+      "total_strengths_claimed": 0,
+      "ungrounded_count": 0,
+      "ungrounded_examples": [],
+      "id": 15
+    }
+  ],
+  "gaps_results": [
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 1
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 2
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 3
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 4
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 5
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 6
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 7
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 8
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 9
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 10
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 11
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 12
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 13
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 14
+    },
+    {
+      "total_gaps_claimed": 3,
+      "contradicted_count": 0,
+      "contradicted_examples": [],
+      "id": 15
+    }
+  ]
+}

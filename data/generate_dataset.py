@@ -1,119 +1,116 @@
 import json
 import random
-import time
-from pathlib import Path
-
-import requests  # HTTP calls to Ollama API
-from tqdm import tqdm #Progress bar
+import requests
+import os
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_TAGS_URL = "http://localhost:11434/api/tags"
-MODEL = "llama3.2:3B"
-OUTPUT_FILE = Path(__file__).resolve().parent / "dataset.jsonl" #ensures the dataset is saved in the same folder as your script
-NUM_EXAMPLES = 300
-REQUEST_TIMEOUT = 60
-MAX_RETRIES = 3
-RETRY_DELAY_SECONDS = 2
+MODEL = "llama3.2:3b"
+OUTPUT_FILE = "data/dataset.jsonl"
+NUM_EXAMPLES = 600
 
 resumes = [
-    "Python developer with 2 years experience in Flask and REST APIs.",
-    "Java backend engineer with 4 years experience in Spring Boot and MySQL.",
-    "Data analyst with 3 years experience in Python, SQL, and Tableau.",
-    "Frontend developer with 2 years experience in React and JavaScript.",
-    "ML engineer with 1 year experience in scikit-learn and pandas.",
-    "DevOps engineer with 5 years experience in Docker, Kubernetes, and AWS.",
-    "Full stack developer with 3 years experience in Node.js and React.",
-    "Android developer with 2 years experience in Java and Kotlin.",
-    "Data scientist with 4 years experience in Python, TensorFlow, and NLP.",
-    "Cloud engineer with 3 years experience in AWS, Terraform, and CI/CD.",
+    "Python developer with 2 years experience in Flask, REST APIs, and PostgreSQL.",
+    "Java backend engineer with 4 years experience in Spring Boot, Hibernate, and MySQL.",
+    "Data analyst with 3 years experience in Python, SQL, Pandas, and Tableau.",
+    "Frontend developer with 2 years experience in React, TypeScript, and CSS.",
+    "ML engineer with 1 year experience in scikit-learn, Pandas, and model deployment.",
+    "DevOps engineer with 5 years experience in Docker, Kubernetes, Jenkins, and AWS.",
+    "Full stack developer with 3 years experience in Node.js, React, and MongoDB.",
+    "Android developer with 2 years experience in Kotlin, Jetpack Compose, and REST APIs.",
+    "Data scientist with 4 years experience in Python, TensorFlow, NLP, and Jupyter.",
+    "Cloud engineer with 3 years experience in AWS, Terraform, and CI/CD pipelines.",
+    "Cybersecurity analyst with 2 years experience in penetration testing and SIEM tools.",
+    "Backend developer with 3 years experience in Django, Celery, and Redis.",
+    "iOS developer with 2 years experience in Swift, UIKit, and CoreData.",
+    "Data engineer with 4 years experience in Apache Spark, Airflow, and BigQuery.",
+    "AI researcher with 2 years experience in PyTorch, transformers, and fine-tuning LLMs.",
+    "Software engineer with 1 year experience in Go, microservices, and gRPC.",
+    "QA engineer with 3 years experience in Selenium, pytest, and CI/CD testing.",
+    "Database administrator with 5 years experience in Oracle, PostgreSQL, and query optimization.",
+    "Computer vision engineer with 2 years experience in OpenCV, YOLO, and Python.",
+    "NLP engineer with 3 years experience in HuggingFace, BERT, and text classification.",
 ]
 
 job_descriptions = [
-    "Backend Python engineer needed. Must know Django or Flask, REST APIs, and PostgreSQL.",
-    "Java developer required. Spring Boot experience mandatory. AWS knowledge is a plus.",
-    "Data analyst role. SQL and Python required. Tableau or Power BI experience preferred.",
-    "Frontend engineer needed. Strong React and JavaScript skills. TypeScript is a plus.",
-    "Machine learning engineer. Must know Python, scikit-learn, and model deployment.",
-    "DevOps role. Docker and Kubernetes required. CI/CD pipeline experience needed.",
-    "Full stack developer. Node.js backend and React frontend experience required.",
-    "Android developer needed. Kotlin preferred. Experience with REST APIs required.",
-    "Data scientist position. NLP and deep learning experience required. Python mandatory.",
-    "Cloud engineer role. AWS certified preferred. Terraform and infrastructure-as-code experience needed.",
+    "Backend Python engineer. Django or Flask required. PostgreSQL and Docker experience preferred.",
+    "Java developer. Spring Boot mandatory. AWS and microservices experience is a plus.",
+    "Data analyst role. SQL and Python required. Power BI or Tableau experience preferred.",
+    "Frontend engineer. Strong React and TypeScript skills required. Next.js is a plus.",
+    "Machine learning engineer. Python and scikit-learn required. MLflow and deployment experience preferred.",
+    "DevOps engineer. Docker and Kubernetes required. AWS certified preferred.",
+    "Full stack developer. Node.js backend and React frontend required. GraphQL is a plus.",
+    "Android developer. Kotlin required. Experience with MVVM architecture and REST APIs needed.",
+    "Data scientist. NLP and deep learning experience required. PyTorch preferred.",
+    "Cloud engineer. AWS certified preferred. Terraform and infrastructure-as-code required.",
+    "Security engineer. Penetration testing experience required. Knowledge of OWASP top 10 needed.",
+    "Senior backend developer. Django and Celery required. Redis and message queues experience needed.",
+    "iOS developer. Swift required. SwiftUI experience preferred. App Store deployment experience needed.",
+    "Data engineer. Apache Spark and Airflow required. Experience with cloud data warehouses preferred.",
+    "LLM engineer. Experience fine-tuning open-source models required. HuggingFace and PEFT knowledge needed.",
+    "Backend Go engineer. Microservices and gRPC required. Kubernetes deployment experience preferred.",
+    "QA automation engineer. Selenium and pytest required. CI/CD pipeline experience needed.",
+    "Senior DBA. PostgreSQL and query optimization required. Experience with replication and backups needed.",
+    "Computer vision engineer. YOLO and OpenCV required. Real-time inference optimization experience preferred.",
+    "NLP engineer. HuggingFace transformers required. Experience with text classification and NER needed.",
 ]
 
-PROMPT_TEMPLATE = """You are an expert HR recruiter and ATS system.
+PROMPT_TEMPLATE = """You are a senior HR recruiter and ATS system with 10 years of experience.
 
-Analyze the following resume against the job description and respond in this EXACT format:
+Analyze the resume against the job description below. Respond in EXACTLY this format with no extra text:
 
 Match Score: [number]/100
-Strengths: [2-3 specific strengths from the resume that match the JD]
-Gaps: [2-3 specific skills or experiences missing from the resume]
+Strengths:
+1. [specific strength from resume that matches JD]
+2. [specific strength from resume that matches JD]
+3. [specific strength from resume that matches JD]
+Gaps:
+1. [specific skill or experience missing from resume but required in JD]
+2. [specific skill or experience missing from resume but required in JD]
+3. [specific skill or experience missing from resume but required in JD]
 Top Interview Questions:
-1. [question]
-2. [question]
-3. [question]
+1. [question targeting a gap or testing a claimed skill]
+2. [question targeting a gap or testing a claimed skill]
+3. [question targeting a gap or testing a claimed skill]
 
-Resume : {resume}
+Resume: {resume}
 
-Job Description : {jd}
+Job Description: {jd}"""
 
-Respond only in the format above. No extra text."""
 
-# Sanity Check 
-def check_ollama_connection():
-    """Fail fast with a clear message if Ollama is not reachable."""
-    try:
-        response = requests.get(OLLAMA_TAGS_URL, timeout=10) #get which model it have 
-        response.raise_for_status()
-    except requests.RequestException as err:
-        raise RuntimeError(
-            "Cannot connect to Ollama at http://localhost:11434. "
-            "Start Ollama first, then run this script again."
-        ) from err
-
-# Engine 
 def generate_example(resume, jd):
     prompt = PROMPT_TEMPLATE.format(resume=resume, jd=jd)
-    payload = {
+    response = requests.post(OLLAMA_URL, json={
         "model": MODEL,
         "prompt": prompt,
-        "stream": False, # Rather sending single text word-to-word, it waits until the entire response is finished...send one single package
-    }
+        "stream": False
+    })
+    result = response.json()
+    return result["response"].strip()
 
-    # Retry loop helps keep long dataset runs stable if one request fails.
-    for attempt in range(1, MAX_RETRIES + 1):
-        try:
-            response = requests.post(OLLAMA_URL, json=payload, timeout=REQUEST_TIMEOUT)
-            # .get v/s .post = GET used to 'check' ; = POST request is used to 'send data' (payload to ollama address)
-            response.raise_for_status()
-            result = response.json()
-            return result["response"].strip()
-            # when ollama replies it gives extra information (like how long it took) . we want only text stored under the key "response"
-        except (requests.RequestException, KeyError, ValueError) as err:
-            if attempt == MAX_RETRIES:
-                raise RuntimeError(
-                    f"Failed to generate example after {MAX_RETRIES} attempts: {err}"
-                ) from err
-            time.sleep(RETRY_DELAY_SECONDS)
 
-# Orchestrator
 def main():
-    check_ollama_connection()
+    os.makedirs(os.path.dirname(OUTPUT_FILE), exist_ok=True)
+    examples = []
     print(f"Generating {NUM_EXAMPLES} examples...")
 
-    with OUTPUT_FILE.open("w", encoding="utf-8") as file_obj:
-        # Write each entry immediately so partial progress is not lost on failures.
-        for _ in tqdm(range(NUM_EXAMPLES), desc="Creating dataset", unit="example"):
-            resume = random.choice(resumes)
-            jd = random.choice(job_descriptions)
-            output = generate_example(resume, jd)
+    for i in range(NUM_EXAMPLES):
+        resume = random.choice(resumes)
+        jd = random.choice(job_descriptions)
+        output = generate_example(resume, jd)
 
-            entry = {
-                "instruction": "Analyze this resume against the job description.",
-                "input": f"Resume: {resume}\n\nJob Description: {jd}",
-                "output": output,
-            }
-            file_obj.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        entry = {
+            "instruction": "Analyze this resume against the job description.",
+            "input": f"Resume: {resume}\n\nJob Description: {jd}",
+            "output": output
+        }
+        examples.append(entry)
+
+        if (i + 1) % 20 == 0:
+            print(f"Generated {i + 1}/{NUM_EXAMPLES} examples")
+
+    with open(OUTPUT_FILE, "w") as f:
+        for entry in examples:
+            f.write(json.dumps(entry) + "\n")
 
     print(f"Done. Dataset saved to {OUTPUT_FILE}")
 
