@@ -1,6 +1,6 @@
 import json
-import random
-import requests
+import random #shuffle pairs
+import requests #HTTP POST request to Ollama local API
 import os
 
 OLLAMA_URL = "http://localhost:11434/api/generate"

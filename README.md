@@ -1,314 +1,124 @@
-# RecruitSheriff — Fine-Tuned LLM for Resume Analysis
+# RecruitSheriff
 
-A fine-tuned language model that scores how well a resume matches a job description. Given a resume (PDF upload or text) and job description as input, the model outputs a match score (0–100), key strengths, skill gaps, and tailored interview questions.
+A fine-tuned LLaMA 3.2 3B model that scores how well a resume matches a job description. Upload a resume (PDF or DOCX) and paste a job description to get a match score, strengths, gaps, and suggested interview questions, generated entirely by a model trained specifically for this task, not a general-purpose LLM prompted on the fly.
 
-Built entirely from scratch — individually owned. Dataset generation, fine-tuning, preference optimization, evaluation, and deployment are all done by one person on consumer hardware.
+**Model on Hugging Face Hub:** [huggingface.co/SomkeX/recruitsheriff](https://huggingface.co/SomkeX/recruitsheriff)
 
----
+<table>
+  <tr>
+    <td><img width="480" alt="Resume upload and job description input" src="https://github.com/user-attachments/assets/8ccc4fb9-9921-46e8-b995-ae2a0bcf3b1e" /></td>
+    <td><img width="480" alt="Match score, strengths, and gaps result" src="https://github.com/user-attachments/assets/23a1115a-14c3-4868-99b9-ec920bc18f84" /></td>
+  </tr>
+</table>
 
-## What Makes This Different
+## Why this exists
 
-Most resume tools are prompt-engineering wrappers around GPT or Gemini. They send your resume to a generic cloud model and return whatever it says. This project takes a fundamentally different approach:
+Most resume-scoring tools are thin wrappers around a general cloud LLM. Send a resume, get whatever GPT or Gemini says back. The output format is inconsistent, the reasoning is generic, and there's no real model ownership behind it.
 
-- A open-source model is fine-tuned on domain-specific resume scoring data
-- The scoring behavior is baked into the model's weights permanently via SFT + DPO
-- No cloud API calls at inference time — the model runs locally
-
----
-
-## Architecture
-
-```
-User uploads PDF resume + pastes Job Description
-                    ↓
-        pdfplumber extracts resume text
-                    ↓
-    Fine-tuned LLaMA 3.2 3B scores the resume
-                    ↓
-  Match Score + Strengths + Gaps + Interview Questions
-                    ↓
-        FastAPI serves it, HTML frontend shows it
-```
+RecruitSheriff fine-tunes an open-source model specifically on resume-to-job-description scoring, so the output format and reasoning behavior are baked into the model's weights instead of held together by prompt engineering. Inference runs on the fine-tuned model directly, with no calls to a third-party LLM API at request time.
 
 ---
 
-## Tech Stack
+## What it actually does
 
-| Layer | Tool | Version | Purpose |
-|---|---|---|---|
-| Base model | LLaMA 3.2 3B Instruct (Meta) | 3B params | Foundation model for fine-tuning |
-| Fine-tuning framework | Unsloth | 2026.4.8 | Memory-efficient QLoRA training |
-| Fine-tuning method | QLoRA (SFT + DPO) | — | Parameter-efficient fine-tuning |
-| Training library | TRL (HuggingFace) | — | SFTTrainer + DPOTrainer |
-| Dataset generation | Ollama (local) | 0.18.3 | Runs LLaMA 3.2 3B locally for data generation |
-| Deep learning | PyTorch | 2.10.0+cu128 | Training backend |
-| CUDA | CUDA Toolkit | 12.8 | GPU acceleration |
-| Attention | Xformers | 0.0.35 | Attention optimization (Flash Attention fallback) |
-| PDF parsing | pdfplumber | — | Extract text from uploaded PDF resumes |
-| API backend | FastAPI | — | Serve fine-tuned model as REST API |
-| Model hosting | Hugging Face Hub | — | Public model deployment |
-| Language | Python | 3.11 | All scripts — data, training, evaluation, API |
+1. You upload a resume (PDF or DOCX) and paste a job description.
+2. The backend extracts the resume text (`pdfplumber` for PDF, `python-docx` for DOCX).
+3. The fine-tuned model generates a structured analysis: a 0 to 100 match score, strengths grounded in the resume, gaps relative to the job description, and interview questions.
+4. If a generation doesn't parse into the expected format, it's retried automatically (up to 2 times) before failing. The deployed model hit 100% format compliance across 15 held-out test cases in the most recent evaluation run.
 
 ---
 
-## Training Hardware
+## Tech stack
 
-| Component | Spec |
+| Layer | Tool |
 |---|---|
-| GPU | NVIDIA GeForce RTX 4060 Laptop GPU |
-| VRAM | 8 GB |
-| CUDA Compute Capability | 8.9 |
-| Training precision | fp16 |
-| Optimizer | PagedAdamW 8-bit |
-| Platform | Windows 11 |
+| Base model | LLaMA 3.2 3B Instruct |
+| Fine-tuning | QLoRA via Unsloth (SFT) |
+| Training data | 600 resume/JD pairs, generated locally via Ollama |
+| Backend | FastAPI |
+| PDF parsing | pdfplumber |
+| DOCX parsing | python-docx |
+| Frontend | HTML, CSS, vanilla JS |
+| Model hosting | Hugging Face Hub |
 
 ---
 
-## Project Structure
+## How it was trained
+
+The model was fine-tuned with QLoRA (4-bit quantization plus LoRA adapters) on 600 resume/job-description examples, using [Unsloth](https://github.com/unslothai/unsloth) for faster, lower-memory training. Training data was generated locally with Ollama running LLaMA 3.2 3B, keeping the whole pipeline free of external API costs.
+
+- **Trainable parameters:** 24.3M of 3.24B (0.75%)
+- **Training run:** 3 epochs, 225 steps, about 7m43s on an RTX 4060 (8GB VRAM laptop GPU)
+- **Final training loss:** 0.2444
+
+Supervised fine-tuning was the focus for this version. Preference optimization (DPO) is a natural next step and is on the roadmap once more preference-labeled data is available to make it worthwhile.
+
+---
+
+## Evaluation
+
+Run against 15 held-out resume/JD pairs not seen during training:
+
+| Metric | Result |
+|---|---|
+| Format compliance (with retry) | 100% (15/15) |
+| Gaps grounded in resume (no contradictions) | 100% (0/45 flagged) |
+| Strengths grounded in resume | 86.4% (19/22, see note below) |
+| Score consistency (stdev across sampled runs) | about 5.8 points |
+
+**Note on the strengths metric:** the automated grounding checker flags a strength as "ungrounded" using word overlap against the resume text. Manual review of the flagged cases found most were checker limitations (for example, "leadership" not string-matching "led a team"), not actual model errors. One case was a genuine issue: the model stated a JD requirement ("cloud deployment experience") as a resume strength when the resume didn't mention it. That's kept in the numbers as an honest, documented limitation rather than smoothed over.
+
+**Baseline comparison:** against Gemini on the same 15 cases, the fine-tuned model tracks closely on clear mismatches but is measurably more conservative on strong-fit candidates (for example, scoring 60 to 80 where Gemini scores 92 to 95). This likely reflects the training data's own scoring tendencies. Full comparison in [`results/baseline_comparison.json`](results/baseline_comparison.json).
+
+---
+
+## Project structure
 
 ```
 RecruitSheriff/
-│
-├── data/
-│   ├── generate_dataset.py     # Ollama local API → 600 JSONL training pairs
-│   ├── dataset.jsonl           # 600 SFT training examples
-│   └── dpo_dataset.jsonl       # DPO preference pairs (chosen vs rejected)
-│
-├── training/
-│   ├── finetune.py             # SFT — QLoRA fine-tuning on LLaMA 3.2 3B
-│   ├── dpo_train.py            # DPO — preference optimization on SFT adapter
-│   └── output/                 # saved LoRA adapter weights
-│
-├── evaluation/
-│   └── evaluate.py             # compare base vs SFT vs DPO model outputs
-│
 ├── app/
-│   ├── main.py                 # FastAPI backend — PDF upload + model inference
-│   ├── static/
-│   │   └── index.html          # frontend — PDF upload + results display
-│   └── requirements.txt
-│
-└── README.md
+│   ├── main.py              # FastAPI backend, POST /analyze, GET /health
+│   ├── static/index.html    # Frontend
+│   └── requirements.txt     # Runtime dependencies only
+├── data/
+│   ├── generate_dataset.py  # Dataset generation via local Ollama
+│   └── dataset.jsonl        # 600 training examples
+├── training/
+│   ├── finetune.py          # QLoRA fine-tuning via Unsloth
+│   └── output/               # LoRA adapter (weights hosted on HF Hub, not in repo)
+├── evaluation/
+│   ├── evaluate.py           # Format compliance, grounding, consistency checks
+│   └── baseline_compare.py   # Comparison against Gemini
+├── results/                   # Evaluation output (JSON)
+└── requirements-training.txt  # Full training and evaluation dependencies
 ```
 
 ---
 
-## Phase 1 — Dataset Generation
+## Running it locally
 
-600 training examples generated locally using Ollama running LLaMA 3.2 3B Instruct. No external API, no cost, no rate limits.
-
-Each example follows the Alpaca instruction format:
-
-```json
-{
-  "instruction": "Analyze this resume against the job description.",
-  "input": "Resume: [text]\n\nJob Description: [text]",
-  "output": "Match Score: 74/100. Strengths: 1. ... 2. ... Gaps: 1. ... 2. ... Top Interview Questions: 1. ... 2. ... 3. ..."
-}
-```
-
-Synthetic data generation is standard practice in domain-specific fine-tuning when labeled real-world data is unavailable. The same LLaMA 3.2 3B model used for data generation is later fine-tuned — keeping the pipeline single-model, minimal storage (~2GB total for model files).
-
----
-
-## Phase 2A — Supervised Fine-Tuning (SFT)
-
-### What SFT does
-Teaches the model the task format and domain behavior by training on (input → output) pairs. The model learns to produce structured resume scoring outputs consistently.
-
-### QLoRA — How It Fits on 8GB VRAM
-
-Full fine-tuning of a 3B model requires ~24GB VRAM. QLoRA solves this with two stacked techniques:
-
-**Quantization:** Base model weights compressed from 16-bit floats to 4-bit NF4 integers. Memory drops from ~6GB to ~2GB with negligible quality loss for downstream tasks.
-
-**LoRA:** Thin trainable adapter matrices (A and B) injected into frozen transformer layers. Only these adapters are updated during training. The base model never changes.
-
-Result: fine-tuning a 3B model on a consumer 8GB GPU in under 4 minutes.
-
-### LoRA Configuration
-
-| Hyperparameter | Value | Reason |
-|---|---|---|
-| Rank (r) | 16 | Standard for instruction fine-tuning — balances capacity and memory |
-| Alpha | 32 | 2× rank — standard scaling factor |
-| Dropout | 0.05 | Light regularization to reduce overfitting |
-| Target modules | q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj | Attention + MLP projection layers |
-| Bias | none | Standard for QLoRA |
-
-### Training Configuration
-
-| Parameter | Value |
-|---|---|
-| Epochs | 3 |
-| Per device batch size | 2 |
-| Gradient accumulation steps | 4 |
-| Effective batch size | 8 |
-| Learning rate | 2e-4 |
-| LR scheduler | Linear with warmup |
-| Warmup steps | 10 |
-| Optimizer | PagedAdamW 8-bit |
-| Precision | fp16 |
-| Max sequence length | 2048 tokens |
-
-### Actual Training Metrics (Real — No Estimates)
-
-| Metric | Value |
-|---|---|
-| Base model | LLaMA 3.2 3B Instruct |
-| Total parameters | 3,237,063,680 |
-| Trainable parameters (LoRA) | 24,313,856 |
-| Trainable % | 0.75% |
-| Training examples | 300 (initial run) |
-| Total steps | 114 |
-| Training time | 3 min 16 sec |
-| Train samples/sec | 4.59 |
-| Train steps/sec | 0.581 |
-| Final training loss | 0.2937 |
-| Overall train loss | 0.6228 |
-
-### Loss Curve (Actual Values)
-
-| Step | Epoch | Loss | Grad Norm |
-|---|---|---|---|
-| 10 | 0.27 | 2.625 | 1.506 |
-| 20 | 0.53 | 0.915 | 0.902 |
-| 30 | 0.80 | 0.599 | 0.954 |
-| 40 | 1.05 | 0.475 | 0.922 |
-| 50 | 1.32 | 0.373 | 0.881 |
-| 60 | 1.59 | 0.387 | 0.613 |
-| 70 | 1.85 | 0.365 | 0.611 |
-| 80 | 2.11 | 0.347 | 0.536 |
-| 90 | 2.37 | 0.289 | 0.524 |
-| 100 | 2.64 | 0.303 | 0.644 |
-| 114 | 3.00 | 0.293 | 0.563 |
-
-Loss dropped from 2.625 → 0.293 across 3 epochs. Consistent decrease with no spikes — stable training, no overfitting detected.
-
----
-
-## Phase 2B — Direct Preference Optimization (DPO)
-
-### What DPO does
-After SFT teaches the model the task, DPO teaches it *preference* — given the same resume and JD, which of two outputs is better. This aligns the model toward higher quality, more helpful responses without needing a separate reward model.
-
-DPO is the same technique used in production LLM alignment (used in models like LLaMA 2 Chat, Mistral Instruct). Standard pipeline: SFT first → DPO on top.
-
-### DPO Dataset Format
-```json
-{
-  "prompt": "Analyze this resume against the job description.\n\nResume: [...]\n\nJob Description: [...]",
-  "chosen": "Match Score: 78/100. Strengths: specific, detailed reasoning...",
-  "rejected": "Match Score: 78/100. Looks good overall."
-}
-```
-
-Each pair has the same prompt — one detailed, structured output (chosen) and one vague, low-quality output (rejected). The model learns to prefer the chosen style.
-
----
-
-## Phase 3 — Evaluation
-
-Unseen resume-JD pairs tested against three model states:
-- Base LLaMA 3.2 3B (no fine-tuning)
-- SFT fine-tuned adapter
-- DPO fine-tuned adapter
-
-Evaluation criteria:
-- Output format correctness (does it follow Match Score / Strengths / Gaps / Questions structure)
-- Score consistency (similar resumes → similar scores)
-- Reasoning quality (are strengths and gaps grounded in the actual resume text)
-- Hallucination detection (does it invent skills not present in the resume)
-
----
-
-## Phase 4 — Deployment
-
-### FastAPI Backend
-Exposes one endpoint: `POST /analyze`
-- Accepts PDF file upload + JD text
-- Extracts resume text via pdfplumber
-- Runs fine-tuned model inference
-- Returns structured JSON response
-
-### Frontend
-Simple HTML page — upload PDF resume, paste JD, click analyze, see results.
-
-### Model Hosting
-LoRA adapter pushed to Hugging Face Hub. Anyone can download and use the fine-tuned model.
-
----
-
-## Key Concepts Learned
-
-**QLoRA:** Quantization + LoRA stacked together. Makes fine-tuning billion-parameter models possible on consumer GPUs by reducing memory from 24GB → 4GB for a 3B model.
-
-**LoRA rank and alpha:** Rank controls adapter capacity. Alpha controls scaling strength. These two hyperparameters directly control the trade-off between learning capacity and memory usage.
-
-**Loss curve interpretation:** Loss measures prediction error. Decreasing loss = model learning. Flattening loss = convergence. Spiking loss = unstable training. Reading loss curves is how you know whether to stop, continue, or fix your data.
-
-**Gradient accumulation:** Simulates larger batch sizes on memory-constrained hardware by accumulating gradients over multiple forward passes before updating weights. Batch size 2 × accumulation 4 = effective batch size 8.
-
-**SFT vs DPO:** SFT teaches what to do (task format and domain). DPO teaches what's better (output quality and preference). Production LLMs use both in sequence.
-
-**Tokenization:** Text is never fed to the model directly. It's converted to integer token IDs using the model's vocabulary. Sequence length limits (2048 tokens here) determine how much text fits in one training example.
-
-**Synthetic data generation:** When labeled domain data doesn't exist, use a capable model to generate it. Quality of generated data directly determines quality of the fine-tuned model.
-
-**Local model serving with Ollama:** Running LLMs locally via a REST API at `localhost:11434`. No cloud, no cost, no rate limits. Used for dataset generation in Phase 1.
-
-**Unsloth:** Custom CUDA kernels that make QLoRA 2× faster and use 60% less VRAM than HuggingFace's native implementation. Same training concepts — just optimized execution.
-
----
-
-## Storage Breakdown
-
-| Item | Location | Size |
-|---|---|---|
-| LLaMA 3.2 3B (HuggingFace cache) | D drive | ~2.4 GB |
-| Ollama + llama3.2:3b | D drive | ~2.0 GB |
-| Python venv + dependencies | D drive | ~8.0 GB |
-| Training output / LoRA adapters | D drive | ~0.4 GB |
-| Dataset files (JSONL) | D drive | ~10 MB |
-| Total | D drive | ~12.8 GB |
-
-All model files redirected to D drive via environment variables. C drive impact from this project: pip cache only (~2GB, clearable with `pip cache purge`).
-
----
-
-## Environment Setup (Windows)
-
-```powershell
-# Redirect all model storage to D drive — run once in PowerShell
-[System.Environment]::SetEnvironmentVariable("HF_HOME", "D:\Project\HuggingFace", "User")
-[System.Environment]::SetEnvironmentVariable("OLLAMA_MODELS", "D:\Project\Ollama\models", "User")
-```
+Requires Python 3.11 and an NVIDIA GPU with CUDA. The model loads in 4-bit via `bitsandbytes`, which requires CUDA, so CPU-only inference isn't currently supported.
 
 ```bash
-# Install dependencies
-pip install unsloth trl datasets transformers accelerate bitsandbytes torch
-pip install pdfplumber fastapi uvicorn requests
+git clone https://github.com/Swaraj-Mandre/RecruitSheriff.git
+cd RecruitSheriff
+python -m venv .venv
+.venv\Scripts\activate      # Windows
+pip install -r app/requirements.txt
+
+python -m uvicorn app.main:app --port 8000
 ```
+
+Open `http://127.0.0.1:8000`, upload a resume, paste a job description, and click analyze.
+
+The app loads the adapter from `training/output/` on disk by default. The same adapter is also published on [Hugging Face Hub](https://huggingface.co/SomkeX/recruitsheriff) if you want to load it independently of this repo.
+
+To retrain or run the evaluation suite, install `requirements-training.txt` instead. It includes `trl`, `datasets`, and the other training-only dependencies that aren't needed just to run the app.
 
 ---
 
-## How to Run
+## Limitations
 
-```bash
-# 1. Generate dataset
-ollama serve
-python data/generate_dataset.py
-
-# 2. SFT fine-tuning
-python training/finetune.py
-
-# 3. DPO training
-python training/dpo_train.py
-
-# 4. Evaluate
-python evaluation/evaluate.py
-
-# 5. Run app
-uvicorn app.main:app --reload
-# Open browser: http://localhost:8000
-```
+- **No live deployment yet.** Free CPU hosting (Hugging Face Spaces) can't run this model. It was tested and confirmed to run out of memory at both full and 8-bit precision on a 16GB-class machine. A GPU-backed deployment is planned; in the meantime, the app runs locally with the steps above.
+- **No OCR support.** Scanned or image-based PDFs return a clear error instead of a result. The app checks for extractable text and fails honestly rather than guessing.
+- **Score consistency:** sampled (non-greedy) generation shows a standard deviation of about 5.8 points across repeated runs on the same input, so scores are best read as an estimate rather than an exact number.
