@@ -2,7 +2,7 @@
 
 A fine-tuned LLaMA 3.2 3B model that scores how well a resume matches a job description. Upload a resume (PDF or DOCX) and paste a job description to get a match score, strengths, gaps, and suggested interview questions, generated entirely by a model trained specifically for this task, not a general-purpose LLM prompted on the fly.
 
-**Model on Hugging Face Hub:** [huggingface.co/SomkeX/recruitsheriff](https://huggingface.co/SomkeX/recruitsheriff)
+**Model on Hugging Face Hub:** [huggingface.co/SomkeX/recruitsheriff]([https://huggingface.co/SomkeX/recruitsheriff](https://huggingface.co/SomkeX/Llama-3.2-3B-RecruitSheriff/blob/main/README.md))
 
 <table>
   <tr>
